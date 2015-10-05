@@ -53,6 +53,7 @@ const render = ({transformer, layouter, vertexRenderer, edgeRenderer}) => {
         if (vertices[key] === undefined) {
           vertices[key] = {
             key,
+            u,
             x: 0,
             y: 0,
             data: d
@@ -75,6 +76,8 @@ const render = ({transformer, layouter, vertexRenderer, edgeRenderer}) => {
         if (edges[key] === undefined) {
           edges[key] = {
             key,
+            u,
+            v,
             source: vertices[uKey],
             target: vertices[vKey],
             points: [[vertices[uKey].px, vertices[uKey].py], [vertices[uKey].px, vertices[uKey].py], [vertices[vKey].px, vertices[vKey].py], [vertices[vKey].px, vertices[vKey].py]],
