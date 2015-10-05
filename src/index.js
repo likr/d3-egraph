@@ -7,6 +7,16 @@ import edgesRenderer from './edges-renderer';
 import TextVertexRenderer from './vertex-renderer/text-vertex-renderer';
 import CurvedEdgeRenderer from './edge-renderer/curved-edge-renderer';
 
+let nextId = 0;
+const uniqueIds = new Map();
+const uniqueId = (u) => {
+  if (uniqueIds.has(u)) {
+    return uniqueIds.get(u);
+  }
+  uniqueIds.set(u, nextId);
+  return nextId++;
+};
+
 const render = ({transformer, layouter, vertexRenderer, edgeRenderer}) => {
   return (selection) => {
     selection.each(function (gOrig) {
@@ -38,33 +48,36 @@ const render = ({transformer, layouter, vertexRenderer, edgeRenderer}) => {
             activeEdges = new Set();
 
       for (const u of g.vertices()) {
-        const d = g.vertex(u);
-        if (vertices[u] === undefined) {
-          vertices[u] = {
-            key: u,
+        const key = uniqueId(u),
+          d = g.vertex(u);
+        if (vertices[key] === undefined) {
+          vertices[key] = {
+            key,
             x: 0,
             y: 0,
             data: d
           };
         }
-        vertices[u].g = g;
-        vertices[u].px = vertices[u].x;
-        vertices[u].py = vertices[u].y;
-        vertices[u].x = positions.vertices[u].x;
-        vertices[u].y = positions.vertices[u].y;
-        vertices[u].width = positions.vertices[u].width;
-        vertices[u].height = positions.vertices[u].height;
-        activeVertices.add(u.toString());
+        vertices[key].g = g;
+        vertices[key].px = vertices[key].x;
+        vertices[key].py = vertices[key].y;
+        vertices[key].x = positions.vertices[u].x;
+        vertices[key].y = positions.vertices[u].y;
+        vertices[key].width = positions.vertices[u].width;
+        vertices[key].height = positions.vertices[u].height;
+        activeVertices.add(key);
       }
 
       for (const [u, v] of g.edges()) {
-        const key = `${u}:${v}`;
+        const uKey = uniqueId(u),
+          vKey = uniqueId(v),
+          key = `${uKey}:${vKey}`;
         if (edges[key] === undefined) {
           edges[key] = {
-            key: key,
-            source: vertices[u],
-            target: vertices[v],
-            points: [[vertices[u].px, vertices[u].py], [vertices[u].px, vertices[u].py], [vertices[v].px, vertices[v].py], [vertices[v].px, vertices[v].py]],
+            key,
+            source: vertices[uKey],
+            target: vertices[vKey],
+            points: [[vertices[uKey].px, vertices[uKey].py], [vertices[uKey].px, vertices[uKey].py], [vertices[vKey].px, vertices[vKey].py], [vertices[vKey].px, vertices[vKey].py]],
             data: g.edge(u, v)
           };
         }
@@ -76,7 +89,7 @@ const render = ({transformer, layouter, vertexRenderer, edgeRenderer}) => {
       }
 
       for (const key in vertices) {
-        if (!activeVertices.has(key)) {
+        if (!activeVertices.has(+key)) {
           delete vertices[key];
         }
       }
