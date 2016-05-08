@@ -1,23 +1,23 @@
-import d3 from 'd3';
+const d3 = require('d3')
 
 const verticesRenderer = (vertexRenderer) => {
   return (selection) => {
     selection.each(function (data) {
-      const element = d3.select(this);
+      const element = d3.select(this)
       const bindSelection = element.selectAll('g.vertex')
-        .data(Object.keys(data).map(key => data[key]), (d) => d.key);
+        .data(Object.keys(data).map(key => data[key]), (d) => d.key)
 
       bindSelection.enter()
         .append('g')
-        .classed('vertex', true);
+        .classed('vertex', true)
 
       bindSelection.exit()
-        .remove();
-    });
+        .remove()
+    })
 
     selection.selectAll('g.vertex')
-      .call(vertexRenderer.render());
-  };
-};
+      .call(vertexRenderer.render())
+  }
+}
 
-export default verticesRenderer;
+module.exports = verticesRenderer

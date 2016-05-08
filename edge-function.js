@@ -1,5 +1,3 @@
-'use strict';
-
 const edgeFunction = (f) => {
   return function (d, i) {
     const arg = {
@@ -9,9 +7,9 @@ const edgeFunction = (f) => {
       vd: d.target.data,
       d: d.data,
       g: d.g
-    };
-    return f.call(this, arg, i);
-  };
-};
+    }
+    return f.call(this, arg, i)
+  }
+}
 
-export default edgeFunction;
+module.exports = edgeFunction

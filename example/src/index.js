@@ -1,54 +1,54 @@
-import querystring from 'querystring'
-import d3 from 'd3';
-import Graph from 'egraph/lib/graph';
-import katz from 'egraph/lib/network/centrality/katz';
-import newman from 'egraph/lib/network/community/newman';
-import transformers from 'egraph/lib/transformer';
-import Renderer from '../../src';
+const querystring = require('querystring')
+const d3 = require('d3')
+const Graph = require('egraph/lib/graph')
+const katz = require('egraph/lib/network/centrality/katz')
+const newman = require('egraph/lib/network/community/newman')
+const transformers = require('egraph/lib/transformer')
+const Renderer = require('../../renderer')
 
 const parseHash = () => {
-  const params = querystring.parse(location.hash.substr(2));
-  params.threshold = +params.threshold || 0;
-  params.x = +params.x || 0;
-  params.y = +params.y || 0;
-  params.scale = +params.scale || 1;
-  params.init = !!params.init;
-  return params;
-};
+  const params = querystring.parse(window.location.hash.substr(2))
+  params.threshold = +params.threshold || 0
+  params.x = +params.x || 0
+  params.y = +params.y || 0
+  params.scale = +params.scale || 1
+  params.init = !!params.init
+  return params
+}
 
 const updateHash = (args) => {
-  location.hash = `?${querystring.stringify(args)}`;
-};
+  window.location.hash = `?${querystring.stringify(args)}`
+}
 
 class Filter {
-  setValues(values) {
-    const vertices = Object.keys(values);
-    this.threshold = 0;
-    this.length = vertices.length;
-    this.order = {};
-    vertices.sort((u, v) => values[u] - values[v]);
+  setValues (values) {
+    const vertices = Object.keys(values)
+    this.threshold = 0
+    this.length = vertices.length
+    this.order = {}
+    vertices.sort((u, v) => values[u] - values[v])
     for (let i = 0; i < this.length; ++i) {
-      this.order[vertices[i]] = i + 1;
+      this.order[vertices[i]] = i + 1
     }
-    return this;
+    return this
   }
 
-  call(u) {
-    return this.order[u] >= this.threshold * this.length;
+  call (u) {
+    return this.order[u] >= this.threshold * this.length
   }
 }
 
 const cutoff = (s, length) => {
   if (s.length <= length) {
-    return s;
+    return s
   }
-  return s.substr(0, length - 1) + '...';
-};
+  return s.substr(0, length - 1) + '...'
+}
 
-const color = d3.scale.category20();
+const color = d3.scale.category20()
 const vertexScale = d3.scale.linear()
-  .range([1, 2]);
-const filter = new Filter();
+  .range([1, 2])
+const filter = new Filter()
 
 const renderer = new Renderer()
   .transformer(new transformers.PipeTransformer(
@@ -56,51 +56,51 @@ const renderer = new Renderer()
     new transformers.CoarseGrainingTransformer()
       .vertexVisibility(({u}) => filter.call(u)),
     new transformers.IsmTransformer()
-  ));
+  ))
 renderer.layouter()
   .edgeWidth(() => 2)
   .layerMargin(200)
   .vertexMargin(3)
   .edgeMargin(3)
-  .ltor(true);
+  .ltor(true)
 renderer.layouter()
   .layerAssignment()
-  .repeat(5);
+  .repeat(5)
 renderer.vertexRenderer()
   .vertexColor(({d}) => color(d.community))
   .vertexScale(({d}) => vertexScale(d.centrality))
-  .vertexText(({d}) => cutoff(d.text, 20));
+  .vertexText(({d}) => cutoff(d.text, 20))
 renderer.edgeRenderer()
   .edgeColor(({ud, vd}) => ud.community === vd.community ? color(ud.community) : '#ccc')
-  .edgeOpacity(() => 1);
+  .edgeOpacity(() => 1)
 
 d3.json('data/graph.json', (data) => {
-  const params = parseHash();
+  const params = parseHash()
 
-  const g = new Graph();
+  const g = new Graph()
   for (const {u, d} of data.vertices) {
-    g.addVertex(u, d);
+    g.addVertex(u, d)
   }
   for (const {u, v, d} of data.edges) {
-    g.addEdge(u, v, d);
+    g.addEdge(u, v, d)
   }
 
-  const centralities = katz(g);
-  const communities = newman(g);
+  const centralities = katz(g)
+  const communities = newman(g)
   for (const u of g.vertices()) {
-    const d = g.vertex(u);
-    color(communities[u]);
-    d.community = communities[u];
-    d.centrality = centralities[u];
+    const d = g.vertex(u)
+    color(communities[u])
+    d.community = communities[u]
+    d.centrality = centralities[u]
   }
-  filter.setValues(centralities);
-  vertexScale.domain(d3.extent(g.vertices(), u => centralities[u]));
+  filter.setValues(centralities)
+  vertexScale.domain(d3.extent(g.vertices(), u => centralities[u]))
 
-  const sizes = renderer.vertexRenderer().calcSize(g);
+  const sizes = renderer.vertexRenderer().calcSize(g)
   for (const u of g.vertices()) {
-    const d = g.vertex(u);
-    d.width = sizes[u].width;
-    d.height = sizes[u].height;
+    const d = g.vertex(u)
+    d.width = sizes[u].width
+    d.height = sizes[u].height
   }
 
   const zoom = d3.behavior.zoom()
@@ -108,27 +108,27 @@ d3.json('data/graph.json', (data) => {
     .scale(params.scale)
     .scaleExtent([0.1, 1])
     .on('zoom', () => {
-      const e = d3.event;
+      const e = d3.event
       updateHash({
         threshold: params.threshold,
         x: e.translate[0],
         y: e.translate[1],
         scale: e.scale
-      });
-    });
+      })
+    })
 
-  const wrapper = d3.select('#screen-wrapper').node(),
-        selection = d3.select('#screen')
-          .attr({
-            width: wrapper.clientWidth,
-            height: wrapper.clientHeight
-          })
-          .datum(g)
-          .call(zoom);
+  const wrapper = d3.select('#screen-wrapper').node()
+  const selection = d3.select('#screen')
+    .attr({
+      width: wrapper.clientWidth,
+      height: wrapper.clientHeight
+    })
+    .datum(g)
+    .call(zoom)
 
   d3.select('#threshold')
-    .on('input', function() {
-      d3.select('#threshold-value').text(`${((1 - +this.value) * 100).toFixed()}%`);
+    .on('input', function () {
+      d3.select('#threshold-value').text(`${((1 - +this.value) * 100).toFixed()}%`)
     })
     .on('change', function () {
       updateHash({
@@ -136,37 +136,37 @@ d3.json('data/graph.json', (data) => {
         x: params.x,
         y: params.y,
         scale: params.scale
-      });
-    });
+      })
+    })
 
   d3.select(window)
     .on('resize', () => {
       selection.attr({
         width: wrapper.clientWidth,
         height: wrapper.clientHeight
-      });
-    });
+      })
+    })
 
   d3.select(window)
     .on('hashchange', () => {
-      const {threshold, x, y, scale, init} = parseHash();
+      const {threshold, x, y, scale, init} = parseHash()
       if (init || threshold !== params.threshold) {
-        d3.select('#threshold').node().value = threshold;
-        d3.select('#threshold-value').text(`${((1 - threshold) * 100).toFixed()}%`);
-        filter.threshold = threshold;
+        d3.select('#threshold').node().value = threshold
+        d3.select('#threshold-value').text(`${((1 - threshold) * 100).toFixed()}%`)
+        filter.threshold = threshold
         selection
           .transition()
           .duration(1000)
           .delay(500)
-          .call(renderer.render());
-        params.threshold = threshold;
+          .call(renderer.render())
+        params.threshold = threshold
       }
       if (init || x !== params.x || y !== params.y || scale !== params.scale) {
         selection.select('g.contents')
-          .attr('transform', `translate(${x},${y})scale(${scale})`);
-        params.x = x;
-        params.y = y;
-        params.scale = scale;
+          .attr('transform', `translate(${x},${y})scale(${scale})`)
+        params.x = x
+        params.y = y
+        params.scale = scale
       }
       if (init) {
         updateHash({
@@ -174,9 +174,9 @@ d3.json('data/graph.json', (data) => {
           x: params.x,
           y: params.y,
           scale: params.scale
-        });
+        })
       }
-    });
+    })
 
   updateHash({
     threshold: params.threshold,
@@ -184,5 +184,5 @@ d3.json('data/graph.json', (data) => {
     y: params.y,
     scale: params.scale,
     init: 1
-  });
-});
+  })
+})
