@@ -5,7 +5,7 @@ Graph drawing library
 
 ```javascript
 var d3 = require('d3')
-var Graph = require('egraph/lib/graph')
+var Graph = require('egraph/graph')
 var Renderer = require('d3-egraph')
 
 var renderer = new Renderer()
