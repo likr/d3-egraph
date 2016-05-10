@@ -1,9 +1,9 @@
 const querystring = require('querystring')
 const d3 = require('d3')
-const Graph = require('egraph/lib/graph')
-const katz = require('egraph/lib/network/centrality/katz')
-const newman = require('egraph/lib/network/community/newman')
-const transformers = require('egraph/lib/transformer')
+const Graph = require('egraph/graph')
+const katz = require('egraph/network/centrality/katz')
+const newman = require('egraph/network/community/newman')
+const transformers = require('egraph/transformer')
 const Renderer = require('../../renderer')
 
 const parseHash = () => {

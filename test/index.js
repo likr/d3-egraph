@@ -8,7 +8,7 @@ describe('Renderer', () => {
 
   it('render', () => {
     const d3 = require('d3')
-    const Graph = require('egraph/lib/graph')
+    const Graph = require('egraph/graph')
     const Renderer = require('../renderer')
 
     const renderer = new Renderer()

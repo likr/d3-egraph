@@ -1,6 +1,6 @@
 {
   "name": "d3-egraph",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "description": "Graph drawing library",
   "main": "renderer.js",
   "files": [
@@ -28,7 +28,7 @@
   },
   "homepage": "https://github.com/likr/d3-egraph#readme",
   "dependencies": {
-    "egraph": "^1.2.0"
+    "egraph": "^2.0.1"
   },
   "peerDependencies": {
     "d3": "^3.5.17"

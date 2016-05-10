@@ -1,5 +1,5 @@
 const d3 = require('d3')
-const accessor = require('egraph/lib/utils/accessor')
+const accessor = require('egraph/utils/accessor')
 const edgeFunction = require('../edge-function')
 const startFrom = require('../svg/path/start-from')
 const lineTo = require('../svg/path/line-to')

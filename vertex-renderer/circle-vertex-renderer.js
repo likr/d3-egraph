@@ -1,5 +1,5 @@
 const d3 = require('d3')
-const accessor = require('egraph/lib/utils/accessor')
+const accessor = require('egraph/utils/accessor')
 const vertexFunction = require('../vertex-function')
 
 const render = ({vertexColor, r}) => {

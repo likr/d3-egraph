@@ -1,7 +1,7 @@
-import CircleVertexRenderer from './circle-vertex-renderer';
-import TextVertexRenderer from './text-vertex-renderer';
+const CircleVertexRenderer = require('./circle-vertex-renderer')
+const TextVertexRenderer = require('./text-vertex-renderer')
 
-export default {
+module.exports = {
   CircleVertexRenderer,
   TextVertexRenderer
-};
+}
