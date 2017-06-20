@@ -19,12 +19,10 @@ const render = ({edgeColor, edgeOpacity}) => {
       if (element.selectAll('path').empty()) {
         element
           .append('path')
-          .attr({
-            d: d => svgPath(d.ppoints),
-            stroke: edgeFunction(edgeColor),
-            opacity: edgeFunction(edgeOpacity),
-            fill: 'none'
-          })
+          .attr('d', d => svgPath(d.ppoints))
+          .attr('stroke', edgeFunction(edgeColor))
+          .attr('opacity', edgeFunction(edgeOpacity))
+          .attr('fill', 'none')
       }
       if (data.ppoints.length < data.points.length) {
         for (let i = data.ppoints.length; i < data.points.length; ++i) {
@@ -36,11 +34,9 @@ const render = ({edgeColor, edgeOpacity}) => {
     })
 
     selection.selectAll('path')
-      .attr({
-        d: d => svgPath(d.points),
-        stroke: edgeFunction(edgeColor),
-        opacity: edgeFunction(edgeOpacity)
-      })
+      .attr('d', d => svgPath(d.points))
+      .attr('stroke', edgeFunction(edgeColor))
+      .attr('opacity', edgeFunction(edgeOpacity))
   }
 }
 

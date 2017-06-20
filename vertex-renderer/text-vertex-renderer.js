@@ -7,46 +7,35 @@ const render = ({vertexColor, vertexScale, vertexText}) => {
     selection.each(function () {
       const element = d3.select(this)
       if (element.select('rect').empty()) {
-        element.attr({
-          transform: ({px, py}) => `translate(${px},${py})`
-        })
+        element.attr('transform', ({px, py}) => `translate(${px},${py})`)
         element.append('rect')
-          .attr({
-            x: ({width}) => -width / 2,
-            y: ({height}) => -height / 2,
-            width: ({width}) => width,
-            height: ({height}) => height,
-            rx: 1,
-            ry: 1,
-            stroke: 'black',
-            fill: vertexFunction(vertexColor)
-          })
+          .attr('x', ({width}) => -width / 2)
+          .attr('y', ({height}) => -height / 2)
+          .attr('width', ({width}) => width)
+          .attr('height', ({height}) => height)
+          .attr('rx', 1)
+          .attr('ry', 1)
+          .attr('stroke', 'black')
+          .attr('fill', vertexFunction(vertexColor))
         element.append('text')
-          .attr({
-            fill: 'black',
-            'text-anchor': 'middle',
-            'dominant-baseline': 'central',
-            'stroke-opacity': 1
-          })
+          .attr('fill', 'black')
+          .attr('text-anchor', 'middle')
+          .attr('dominant-baseline', 'central')
+          .attr('stroke-opacity', 1)
       }
     })
 
-    selection.attr({
-      transform: ({x, y}) => `translate(${x},${y})`
-    })
+    selection
+      .attr('transform', ({x, y}) => `translate(${x},${y})`)
     selection.select('rect')
-      .attr({
-        x: ({width}) => -width / 2,
-        y: ({height}) => -height / 2,
-        width: ({width}) => width,
-        height: ({height}) => height,
-        fill: vertexFunction(vertexColor)
-      })
+      .attr('x', ({width}) => -width / 2)
+      .attr('y', ({height}) => -height / 2)
+      .attr('width', ({width}) => width)
+      .attr('height', ({height}) => height)
+      .attr('fill', vertexFunction(vertexColor))
     selection.select('text')
       .text(vertexFunction(vertexText))
-      .attr({
-        'font-size': (d, i) => vertexFunction(vertexScale)(d, i) * 12 + 'pt'
-      })
+      .attr('font-size', (d, i) => vertexFunction(vertexScale)(d, i) * 12 + 'pt')
   }
 }
 

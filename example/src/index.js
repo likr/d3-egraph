@@ -1,3 +1,4 @@
+require('babel-polyfill')
 const querystring = require('querystring')
 const d3 = require('d3')
 const Graph = require('egraph/graph')
@@ -45,8 +46,8 @@ const cutoff = (s, length) => {
   return s.substr(0, length - 1) + '...'
 }
 
-const color = d3.scale.category20()
-const vertexScale = d3.scale.linear()
+const color = d3.scaleOrdinal(d3.schemeCategory20)
+const vertexScale = d3.scaleLinear()
   .range([1, 2])
 const filter = new Filter()
 
@@ -103,28 +104,25 @@ d3.json('data/graph.json', (data) => {
     d.height = sizes[u].height
   }
 
-  const zoom = d3.behavior.zoom()
-    .translate([params.x, params.y])
-    .scale(params.scale)
+  const zoom = d3.zoom()
     .scaleExtent([0.1, 1])
     .on('zoom', () => {
-      const e = d3.event
+      const transform = d3.event.transform
       updateHash({
         threshold: params.threshold,
-        x: e.translate[0],
-        y: e.translate[1],
-        scale: e.scale
+        x: transform.x,
+        y: transform.y,
+        scale: transform.k
       })
     })
 
   const wrapper = d3.select('#screen-wrapper').node()
   const selection = d3.select('#screen')
-    .attr({
-      width: wrapper.clientWidth,
-      height: wrapper.clientHeight
-    })
+    .attr('width', wrapper.clientWidth)
+    .attr('height', wrapper.clientHeight)
     .datum(g)
     .call(zoom)
+    .call(zoom.transform, d3.zoomIdentity.translate(params.x, params.y).scale(params.scale))
 
   d3.select('#threshold')
     .on('input', function () {
@@ -141,10 +139,9 @@ d3.json('data/graph.json', (data) => {
 
   d3.select(window)
     .on('resize', () => {
-      selection.attr({
-        width: wrapper.clientWidth,
-        height: wrapper.clientHeight
-      })
+      selection
+        .attr('width', wrapper.clientWidth)
+        .attr('height', wrapper.clientHeight)
     })
 
   d3.select(window)

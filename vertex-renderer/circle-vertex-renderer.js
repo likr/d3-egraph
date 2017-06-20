@@ -8,23 +8,19 @@ const render = ({vertexColor, r}) => {
       const element = d3.select(this)
       if (element.select('circle').empty()) {
         element.append('circle')
-          .attr({
-            cx: d => d.px,
-            cy: d => d.py,
-            r: r,
-            stroke: 'black',
-            fill: vertexFunction(vertexColor)
-          })
+          .attr('cx', d => d.px)
+          .attr('cy', d => d.py)
+          .attr('r', r)
+          .attr('stroke', 'black')
+          .attr('fill', vertexFunction(vertexColor))
       }
     })
 
     selection.select('circle')
-      .attr({
-        cx: d => d.x,
-        cy: d => d.y,
-        r: r,
-        fill: vertexFunction(vertexColor)
-      })
+      .attr('cx', d => d.x)
+      .attr('cy', d => d.y)
+      .attr('r', r)
+      .attr('fill', vertexFunction(vertexColor))
   }
 }
 
