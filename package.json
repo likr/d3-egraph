@@ -2,18 +2,13 @@
   "name": "d3-egraph",
   "version": "1.0.0",
   "description": "D3 renderer for egraph",
-  "main": "renderer.js",
+  "main": "index.js",
   "files": [
-    "renderer.js",
-    "vertices-renderer.js",
-    "edges-renderer.js",
-    "vertex-function.js",
-    "edge-function.js",
-    "vertex-renderer",
-    "edge-renderer",
-    "svg"
+    "src"
   ],
   "scripts": {
+    "build": "webpack",
+    "deploy": "NODE_ENV=production npm run build && gh-pages -d example",
     "example": "webpack-dev-server --content-base example",
     "test": "mocha"
   },
@@ -39,6 +34,7 @@
     "babel-polyfill": "^6.23.0",
     "babel-preset-latest": "^6.24.1",
     "d3": "^4.9.1",
+    "gh-pages": "^1.0.0",
     "jsdom": "^9.0.0",
     "mocha": "^2.4.5",
     "mocha-jsdom": "^1.1.0",

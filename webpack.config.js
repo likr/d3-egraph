@@ -5,15 +5,17 @@ const options = {
   module: {
     rules: [
       {
-        test: /\.jsx?$/,
+        test: /\.js$/,
         include: [
-          path.resolve(__dirname, 'src')
+          path.resolve(__dirname, 'src'),
+          path.resolve(__dirname, 'example'),
+          path.resolve(__dirname, 'node_modules/egraph')
         ],
         use: [
           {
             loader: 'babel-loader',
             options: {
-              presets: ['latest', 'react']
+              presets: ['latest']
             }
           }
         ]
@@ -32,7 +34,7 @@ const options = {
   plugins: [
   ],
   resolve: {
-    extensions: ['.js', '.jsx']
+    extensions: ['.js']
   },
   devServer: {
     contentBase: path.join(__dirname, 'example'),

@@ -5,7 +5,7 @@ const Graph = require('egraph/graph')
 const katz = require('egraph/network/centrality/katz')
 const newman = require('egraph/network/community/newman')
 const transformers = require('egraph/transformer')
-const Renderer = require('../../renderer')
+const {Renderer} = require('../../')
 
 const parseHash = () => {
   const params = querystring.parse(window.location.hash.substr(2))
