@@ -1,6 +1,6 @@
 {
   "name": "d3-egraph",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "D3 renderer for egraph",
   "main": "index.js",
   "files": [
@@ -22,11 +22,9 @@
     "url": "https://github.com/likr/d3-egraph/issues"
   },
   "homepage": "https://github.com/likr/d3-egraph#readme",
-  "dependencies": {
-    "egraph": "^3.0.0"
-  },
   "peerDependencies": {
-    "d3": "^4.9.1"
+    "d3": "^4.9.1",
+    "egraph": "^3.0.0"
   },
   "devDependencies": {
     "babel-core": "^6.25.0",
@@ -34,6 +32,7 @@
     "babel-polyfill": "^6.23.0",
     "babel-preset-latest": "^6.24.1",
     "d3": "^4.9.1",
+    "egraph": "^3.0.0",
     "gh-pages": "^1.0.0",
     "jsdom": "^9.0.0",
     "mocha": "^2.4.5",
